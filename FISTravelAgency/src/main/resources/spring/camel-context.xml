@@ -5,13 +5,41 @@
     <bean class="com.redhat.travelagency.AggregationStrat" id="aggStrat"/>
     <bean class="com.redhat.travelagency.BRMSReqProcessor" id="brmsReqProc"/>
     <bean class="com.redhat.travelagency.BRMSRespProcessor" id="brmsRespProc"/>
+    <bean class="com.redhat.travelagency.ThreeScaleCall" id="3scaleCall">
+        <constructor-arg>
+            <value type="java.lang.String">techoffice-admin.3scale.net</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value type="int">443</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>${SERVICE_TOKEN}</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>${SERVICE_ID}</value>
+        </constructor-arg>
+        <constructor-arg>
+             <value>${USER_KEY}</value>
+        </constructor-arg>
+    </bean>
+    <bean
+        class="org.springframework.boot.context.embedded.ServletRegistrationBean" id="camelServlet">
+        <property name="name" value="CamelServlet"/>
+        <property name="loadOnStartup" value="1"/>
+        <property name="servlet">
+            <bean
+                class="org.apache.camel.component.servlet.CamelHttpTransportServlet" id="camelServlet"/>
+        </property>
+        <property name="urlMappings" value="/*"/>
+    </bean>
     <camelContext id="context-a07d96fd-3af7-4782-a701-b5f3c1d4e1cd"
         trace="false" xmlns="http://camel.apache.org/schema/spring">
         <propertyPlaceholder id="urls" location="props.properties"/>
-        <restConfiguration component="netty4-http" enableCORS="true"
-            host="0.0.0.0" port="8182"/>
+        <restConfiguration apiContextPath="api-docs" component="servlet"
+            enableCORS="true" host="0.0.0.0"/>
         <rest consumes="application/json" path="/rest">
-            <post uri="/book">
+            <post outType="com.redhat.travelagency.model.BookingResp"
+                type="com.redhat.travelagency.model.BookingReq" uri="/book">
                 <to uri="direct:book"/>
             </post>
         </rest>
@@ -27,14 +55,17 @@
                 <choice id="_choice1">
                     <when id="_when1">
                         <simple>${body} is 'com.redhat.FlightReq'</simple>
+                        <wireTap id="_wireTap1" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;hits&quot;)"/>
                         <to id="_to1" uri="direct:flightRoute"/>
                     </when>
                     <when id="_when2">
                         <simple>${body} is 'com.redhat.HotelReq'</simple>
+                        <wireTap id="_wireTap2" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;hits&quot;)"/>
                         <to id="_to2" uri="direct:hotelRoute"/>
                     </when>
                     <when id="_when3">
                         <simple>${body} is 'com.redhat.CarReq'</simple>
+                        <wireTap id="_wireTap3" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;hits&quot;)"/>
                         <to id="_to3" uri="direct:carRoute"/>
                     </when>
                 </choice>
