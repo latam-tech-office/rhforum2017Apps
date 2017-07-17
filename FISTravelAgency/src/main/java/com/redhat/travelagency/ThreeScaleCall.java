@@ -98,7 +98,7 @@ public class ThreeScaleCall {
 	}
 
 
-	public void threeScaleAuthRep(String metric){
+	public boolean threeScaleAuthRep(String metric){
 		
 		ServiceApi serviceApi = ServiceApiDriver.createApi();
 
@@ -119,17 +119,20 @@ public class ThreeScaleCall {
 		// the 'preferred way' of calling the backend: authrep
 		try {
 		  response = serviceApi.authrep(serviceToken, serviceId, params);
-		  System.out.println("AuthRep on User Key Success: " + response.success());
+		  System.out.println("AuthRep on User Key Success (" + metric + ") : " + response.success());
 		  if (response.success() == true) {
 		    // your api access got authorized and the  traffic added to 3scale backend
 		    System.out.println("Plan: " + response.getPlan());
+		    return true;
 		  } else {
 		    // your api access did not authorized, check why
 		    System.out.println("Error: " + response.getErrorCode());
 		    System.out.println("Reason: " + response.getReason());
+		    return false;
 		  }
 		} catch (ServerError serverError) {
 		  serverError.printStackTrace();
+		  return false;
 		}
 
 	}

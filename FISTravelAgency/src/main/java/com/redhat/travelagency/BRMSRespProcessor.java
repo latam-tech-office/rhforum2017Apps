@@ -23,7 +23,7 @@ public class BRMSRespProcessor implements Processor {
 		
 		
 		List<Integer> flightDisc=JsonPath.read(json, "$..flightDisc");
-		List<Integer> hotelDisc=JsonPath.read(json, "$...hotelDisc");
+		List<Integer> hotelDisc=JsonPath.read(json, "$..hotelDisc");
 		List<Integer> carDisc=JsonPath.read(json, "$..carDisc");
 		
 		

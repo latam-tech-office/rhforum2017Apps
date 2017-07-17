@@ -38,11 +38,13 @@
         <restConfiguration apiContextPath="api-docs" component="servlet"
             enableCORS="true" host="0.0.0.0"/>
         <rest consumes="application/json" path="/rest">
-        	<get uri="/" outType="java.lang.String">
-        		<camel:route>
-        			<camel:setBody><camel:constant>OK</camel:constant></camel:setBody>
-        		</camel:route>
-        	</get>
+            <get outType="java.lang.String" uri="/">
+                <camel:route>
+                    <camel:setBody>
+                        <camel:constant>OK</camel:constant>
+                    </camel:setBody>
+                </camel:route>
+            </get>
             <post outType="com.redhat.travelagency.model.BookingResp"
                 type="com.redhat.travelagency.model.BookingReq" uri="/book">
                 <to uri="direct:book"/>
@@ -65,7 +67,7 @@
         </rest>
         <route id="bookings">
             <from id="_from1" uri="direct:book"/>
-            <wireTap id="_wireTap5" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;booking&quot;)"/>
+            <wireTap id="_wireTap5" ignoreInvalidEndpoint="true" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;booking&quot;)"/>
             <unmarshal id="_unmarshal1">
                 <json library="Gson" prettyPrint="true" unmarshalTypeName="com.redhat.travelagency.model.BookingReq"/>
             </unmarshal>
@@ -92,7 +94,7 @@
         </route>
         <route id="flightRoute">
             <from id="_from2" uri="direct:flightRoute"/>
-            <wireTap id="_wireTap1" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;book_flight&quot;)"/>
+            <wireTap id="_wireTap1" ignoreInvalidEndpoint="true" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;book_flight&quot;)"/>
             <setHeader headerName="Exchange.HTTP_METHOD" id="_setHeader1">
                 <constant>POST</constant>
             </setHeader>
@@ -106,7 +108,7 @@
         </route>
         <route id="hotelRoute">
             <from id="_from3" uri="direct:hotelRoute"/>
-            <wireTap id="_wireTap2" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;book_hotel&quot;)"/>
+            <wireTap id="_wireTap2" ignoreInvalidEndpoint="true" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;book_hotel&quot;)"/>
             <setHeader headerName="Exchange.HTTP_METHOD" id="_setHeader2">
                 <constant>POST</constant>
             </setHeader>
@@ -120,7 +122,7 @@
         </route>
         <route id="carRoute">
             <from id="_from4" uri="direct:carRoute"/>
-            <wireTap id="_wireTap3" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;book_car&quot;)"/>
+            <wireTap id="_wireTap3" ignoreInvalidEndpoint="true" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;book_car&quot;)"/>
             <setHeader headerName="Exchange.HTTP_METHOD" id="_setHeader3">
                 <constant>POST</constant>
             </setHeader>
@@ -134,7 +136,7 @@
         </route>
         <route id="brms">
             <from id="_from5" uri="direct:brmsRoute"/>
-            <wireTap id="_wireTap4" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;discount&quot;)"/>
+            <wireTap id="_wireTap4" ignoreInvalidEndpoint="true" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;discount&quot;)"/>
             <setProperty id="_setProperty1" propertyName="BookingResp">
                 <simple>${body}</simple>
             </setProperty>
