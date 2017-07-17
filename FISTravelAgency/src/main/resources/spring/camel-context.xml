@@ -19,7 +19,7 @@
             <value>${SERVICE_ID}</value>
         </constructor-arg>
         <constructor-arg>
-             <value>${USER_KEY}</value>
+            <value>${USER_KEY}</value>
         </constructor-arg>
     </bean>
     <bean
@@ -42,6 +42,21 @@
                 type="com.redhat.travelagency.model.BookingReq" uri="/book">
                 <to uri="direct:book"/>
             </post>
+            <post outType="com.redhat.FlightResp"
+                type="com.redhat.FlightReq" uri="/flight">
+                <to uri="direct:flightRoute"/>
+            </post>
+            <post outType="com.redhat.CarResp" type="com.redhat.CarReq" uri="/car">
+                <to uri="direct:carRoute"/>
+            </post>
+            <post outType="com.redhat.HotelResp"
+                type="com.redhat.HotelReq" uri="/hotel">
+                <to uri="direct:hotelRoute"/>
+            </post>
+            <post outType="com.redhat.travelagency.model.BookingResp"
+                type="com.redhat.travelagency.model.BookingResp" uri="/discounts">
+                <to uri="direct:brmsRoute"/>
+            </post>
         </rest>
         <route id="bookings">
             <from id="_from1" uri="direct:book"/>
@@ -55,17 +70,14 @@
                 <choice id="_choice1">
                     <when id="_when1">
                         <simple>${body} is 'com.redhat.FlightReq'</simple>
-                        <wireTap id="_wireTap1" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;hits&quot;)"/>
                         <to id="_to1" uri="direct:flightRoute"/>
                     </when>
                     <when id="_when2">
                         <simple>${body} is 'com.redhat.HotelReq'</simple>
-                        <wireTap id="_wireTap2" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;hits&quot;)"/>
                         <to id="_to2" uri="direct:hotelRoute"/>
                     </when>
                     <when id="_when3">
                         <simple>${body} is 'com.redhat.CarReq'</simple>
-                        <wireTap id="_wireTap3" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;hits&quot;)"/>
                         <to id="_to3" uri="direct:carRoute"/>
                     </when>
                 </choice>
@@ -74,6 +86,7 @@
         </route>
         <route id="flightRoute">
             <from id="_from2" uri="direct:flightRoute"/>
+            <wireTap id="_wireTap1" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;book_flight&quot;)"/>
             <setHeader headerName="Exchange.HTTP_METHOD" id="_setHeader1">
                 <constant>POST</constant>
             </setHeader>
@@ -87,6 +100,7 @@
         </route>
         <route id="hotelRoute">
             <from id="_from3" uri="direct:hotelRoute"/>
+            <wireTap id="_wireTap2" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;book_hotel&quot;)"/>
             <setHeader headerName="Exchange.HTTP_METHOD" id="_setHeader2">
                 <constant>POST</constant>
             </setHeader>
@@ -100,6 +114,7 @@
         </route>
         <route id="carRoute">
             <from id="_from4" uri="direct:carRoute"/>
+            <wireTap id="_wireTap3" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;book_car&quot;)"/>
             <setHeader headerName="Exchange.HTTP_METHOD" id="_setHeader3">
                 <constant>POST</constant>
             </setHeader>
