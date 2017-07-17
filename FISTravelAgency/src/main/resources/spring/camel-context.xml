@@ -38,6 +38,11 @@
         <restConfiguration apiContextPath="api-docs" component="servlet"
             enableCORS="true" host="0.0.0.0"/>
         <rest consumes="application/json" path="/rest">
+        	<get uri="/" outType="java.lang.String">
+        		<camel:route>
+        			<camel:setBody><camel:constant>OK</camel:constant></camel:setBody>
+        		</camel:route>
+        	</get>
             <post outType="com.redhat.travelagency.model.BookingResp"
                 type="com.redhat.travelagency.model.BookingReq" uri="/book">
                 <to uri="direct:book"/>
@@ -60,6 +65,7 @@
         </rest>
         <route id="bookings">
             <from id="_from1" uri="direct:book"/>
+            <wireTap id="_wireTap5" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;booking&quot;)"/>
             <unmarshal id="_unmarshal1">
                 <json library="Gson" prettyPrint="true" unmarshalTypeName="com.redhat.travelagency.model.BookingReq"/>
             </unmarshal>
@@ -128,6 +134,7 @@
         </route>
         <route id="brms">
             <from id="_from5" uri="direct:brmsRoute"/>
+            <wireTap id="_wireTap4" uri="bean:3scaleCall?method=threeScaleAuthRep(&quot;discount&quot;)"/>
             <setProperty id="_setProperty1" propertyName="BookingResp">
                 <simple>${body}</simple>
             </setProperty>
