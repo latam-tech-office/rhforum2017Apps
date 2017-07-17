@@ -36,7 +36,12 @@
         trace="false" xmlns="http://camel.apache.org/schema/spring">
         <propertyPlaceholder id="urls" location="props.properties"/>
         <restConfiguration apiContextPath="api-docs" component="servlet"
-            enableCORS="true" host="0.0.0.0"/>
+            enableCORS="true" host="0.0.0.0" >
+           
+           <apiProperty key="api.title" value="RH Travel Agency API"/>
+            <apiProperty key="api.version" value="1.0.0"/>
+            <apiProperty key="api.description" value="Book trips"/>
+            </restConfiguration>
         <rest consumes="application/json" path="/rest">
             <get outType="java.lang.String" uri="/">
                 <camel:route>
