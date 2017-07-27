@@ -9,9 +9,9 @@
         <constructor-arg>
             <value type="java.lang.String">${THREESCALE_HOST}</value>
         </constructor-arg>
-        <constructor-arg>
+        <!--  <constructor-arg>
             <value type="int">443</value>
-        </constructor-arg>
+        </constructor-arg>  -->
         <constructor-arg>
             <value>${SERVICE_TOKEN}</value>
         </constructor-arg>

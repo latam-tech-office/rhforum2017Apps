@@ -7,7 +7,7 @@ import threescale.v3.api.impl.*;
 public class ThreeScaleCall {
 	
 	private String hostname;
-	private int port;
+	//private int port;
 	private String user_key;
 	private String serviceToken;
 	private String serviceId;
@@ -15,10 +15,10 @@ public class ThreeScaleCall {
 	private String app_key;
 	
 	
-	public ThreeScaleCall(String hostname, int port, String serviceToken, String serviceId, String user_key) {
+	public ThreeScaleCall(String hostname, /*int port, */String serviceToken, String serviceId, String user_key) {
 		super();
 		this.hostname = hostname;
-		this.port = port;
+	//	this.port = port;
 		this.serviceToken = serviceToken;
 		this.serviceId = serviceId;
 		this.user_key = user_key;
@@ -38,7 +38,7 @@ public class ThreeScaleCall {
 	}
 
 
-	public int getPort() {
+	/*public int getPort() {
 		return port;
 	}
 
@@ -46,7 +46,7 @@ public class ThreeScaleCall {
 	public void setPort(int port) {
 		this.port = port;
 	}
-
+*/
 
 	public String getUser_key() {
 		return user_key;
@@ -101,11 +101,15 @@ public class ThreeScaleCall {
 	public boolean threeScaleAuthRep(String metric){
 		ServiceApi serviceApi=null;
 		
-		if(this.getHostname().equals(""))		
+		if(this.getHostname().equals("")){		
 			serviceApi = ServiceApiDriver.createApi();
-		else
+			System.out.println("SaaS Mode");
+		}
+		else{
 		// When connecting to an on-premise instance of the 3scale platform, create the API object for a given host and port:
 			serviceApi = ServiceApiDriver.createApi(this.getHostname(), 3000, false);
+			System.out.println("On-Premises Mode, host: " + this.getHostname());
+		}
 
 		
 		ParameterMap params = new ParameterMap();              // the parameters of your call
