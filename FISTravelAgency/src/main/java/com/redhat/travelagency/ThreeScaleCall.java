@@ -99,12 +99,15 @@ public class ThreeScaleCall {
 
 
 	public boolean threeScaleAuthRep(String metric){
+		ServiceApi serviceApi=null;
 		
-		ServiceApi serviceApi = ServiceApiDriver.createApi();
-
+		if(this.getHostname().equals(""))		
+			serviceApi = ServiceApiDriver.createApi();
+		else
 		// When connecting to an on-premise instance of the 3scale platform, create the API object for a given host and port:
-//		ServiceApi serviceApi = ServiceApiDriver.createApi(config.getHostname(), config.getPort(), true);
+			serviceApi = ServiceApiDriver.createApi(this.getHostname(), 3000, false);
 
+		
 		ParameterMap params = new ParameterMap();              // the parameters of your call
 		params.add("user_key", getUser_key());               // Add the user key of your application for authorization
 

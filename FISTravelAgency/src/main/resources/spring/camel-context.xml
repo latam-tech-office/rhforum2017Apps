@@ -7,7 +7,7 @@
     <bean class="com.redhat.travelagency.BRMSRespProcessor" id="brmsRespProc"/>
     <bean class="com.redhat.travelagency.ThreeScaleCall" id="3scaleCall">
         <constructor-arg>
-            <value type="java.lang.String">techoffice-admin.3scale.net</value>
+            <value type="java.lang.String">${THREESCALE_HOST}</value>
         </constructor-arg>
         <constructor-arg>
             <value type="int">443</value>
