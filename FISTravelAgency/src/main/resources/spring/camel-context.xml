@@ -35,7 +35,8 @@
     <camelContext id="context-a07d96fd-3af7-4782-a701-b5f3c1d4e1cd"
         trace="false" xmlns="http://camel.apache.org/schema/spring">
         <propertyPlaceholder id="urls" location="props.properties"/>
-        <restConfiguration apiContextPath="api-docs" component="servlet" enableCORS="true" host="0.0.0.0">
+        <restConfiguration apiContextPath="api-docs" component="servlet"
+            enableCORS="true" host="0.0.0.0">
             <apiProperty key="api.title" value="RH Travel Agency API"/>
             <apiProperty key="api.version" value="1.0.0"/>
             <apiProperty key="api.description" value="Book trips"/>
@@ -45,7 +46,7 @@
             <get outType="java.lang.String" uri="/">
                 <camel:route>
                     <camel:setBody>
-                        <camel:constant>OK</camel:constant>
+                        <camel:constant>{"result": "OK"}</camel:constant>
                     </camel:setBody>
                 </camel:route>
             </get>
